@@ -1,0 +1,125 @@
+---
+title: "Example"
+author: "Marco Sousa"
+date: "3/3/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Title 1
+
+```{r libraries, include=FALSE}
+
+library(dplyr)
+
+#install.packages('spatstat')
+library(spatstat)
+
+library(ggplot2)
+library(gridExtra)
+
+library(grid)
+
+library(sp)
+```
+
+
+## Title 2
+
+```{r loadingData, echo=FALSE}
+
+#promising data (like D3.js: Promise.all([...]).then(main) I think
+data(longleaf)
+df <- data.frame(longleaf)
+
+data(lansing)
+df2 <- data.frame(lansing)
+
+data(bei)
+df3 <- data.frame(bei)
+```
+
+```{r looking, echo=FALSE}
+head(df)
+```
+
+
+### Spacial Point Locations
+
+Two plots representing Longleaf locations. The left representing the discrete spatial points. The right representing the spatial points with varied diameter with its respective breastheight.
+
+```{r longleafPlots, echo=FALSE, fig.show="hold",out.width='90%',out.height='90%' }
+par(pty="s", mfrow=c(1,2))
+plot(df$x,df$y, main='Longleaf Locations', xlab="x", ylab="y", asp=1)
+plot(df$x,df$y,main='Longleaf Diameters', xlab="x", ylab="y", asp=1, cex=(df$marks)/30 )
+
+```
+
+Density histograms separated into bins:
+```{r histogramPlot2, echo=FALSE}
+#Using ggplot more cleanly
+
+bin10 <- ggplot(df, aes(x,y)) + stat_bin2d(bins=10) + theme(aspect.ratio=1) + scale_fill_viridis_c(option = "magma") +theme(plot.margin = margin(0, 2.5, 0, 0, "cm"))
+
+bin20 <- ggplot(df, aes(x,y)) + stat_bin2d(bins=20) + theme(aspect.ratio=1) + scale_fill_viridis_c(option = "magma")+theme(plot.margin = margin(0, 2.5, 0, 0, "cm"))
+
+```
+
+```{r histogramPlot3, echo=FALSE, fig.show="hold", out.width='60%'}
+bin10
+bin20
+```
+
+The following is a plot of marginal densities along x and y:
+```{r marginalDensityPlot, echo=FALSE, out.width='90%',fig.align='center'}
+#df <- data.frame(x = rnorm(1000, 50, 10), y = rnorm(1000, 50, 10))
+
+p <- ggplot(df, aes(x, y)) + geom_point() + theme_classic()+ coord_fixed() + ggtitle("Point Marginal Density Plot") + theme(plot.title = element_text(hjust = 0.5, size = 17))
+ggExtra::ggMarginal(p, type = "histogram")
+
+
+```
+
+
+### Spatial Observations of Lansing
+
+Spatial points in the Lansing dataset have species associated to them, and thus is a categorical attribute of the data. The data looks as follows:
+
+```{r lansingStart, echo=FALSE}
+### Lansing Multitype Data
+head(df2)
+
+```
+
+A summary of the dataset is as follows:
+
+```{r lansingSummary, echo=FALSE}
+### Lansing Multitype Data
+summary(lansing)
+
+
+```
+
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
