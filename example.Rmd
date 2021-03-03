@@ -11,6 +11,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Title 1
 
+
+
 ```{r libraries, include=FALSE}
 
 library(dplyr)
@@ -29,7 +31,11 @@ library(sp)
 
 ## Title 2
 
-```{r loadingData, echo=FALSE}
+
+outside under title
+
+$$\sum_{i=1}^{a}$$
+```{r loadingData, echo=TRUE}
 
 #promising data (like D3.js: Promise.all([...]).then(main) I think
 data(longleaf)
